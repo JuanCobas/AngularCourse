@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { RoomsComponent } from "./rooms/rooms.component";
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RoomsComponent],
+  imports: [RoomsComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -14,4 +14,6 @@ export class AppComponent {
   show(){
     console.log("Estoy")
   }
+
+  role: string= "Admin";
 }

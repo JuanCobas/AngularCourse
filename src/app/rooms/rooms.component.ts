@@ -28,7 +28,8 @@ export class RoomsComponent {
     price: 500,
     photos: 'https',
     checkingTime: new Date('11-10-21'),
-    checkoutTime: new Date('12-10-21')
+    checkoutTime: new Date('12-10-21'),
+    rating: 5.554
   },
   {
     roomNumber: 2,
@@ -37,7 +38,8 @@ export class RoomsComponent {
     price: 1000,
     photos: 'https',
     checkingTime: new Date('11-10-21'),
-    checkoutTime: new Date('12-10-21')
+    checkoutTime: new Date('12-10-21'),
+    rating: 4.467
   },
   {
     roomNumber: 3,
@@ -46,7 +48,8 @@ export class RoomsComponent {
     price: 1500,
     photos: 'https',
     checkingTime: new Date('11-10-21'),
-    checkoutTime: new Date('12-10-21')
+    checkoutTime: new Date('12-10-21'),
+    rating: 8.285
   }
  ]
 

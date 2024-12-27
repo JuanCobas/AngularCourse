@@ -1,1 +1,15 @@
+<h1>hello World!</h1>
+
 <app-rooms (show) = "show()" [title] = "title"></app-rooms>
+
+<div [ngSwitch] = "role">
+    <div *ngSwitchCase = "'User'" >
+        Welcome User!!
+    </div>
+    <div *ngSwitchCase="'Admin'">
+        Welcome Admin!
+    </div>
+    <div *ngSwitchDefault="">
+        Welcome Default!
+    </div>
+</div>
