@@ -1,3 +1,6 @@
+<app-header></app-header>
+
+
 
 <div [ngStyle]="{'color': rooms.availableRooms ? 'blue' : 'red'}" *ngIf="hidden">
 
@@ -11,31 +14,18 @@
         {{ rooms.totalRooms && rooms.totalRooms > 0 ? rooms.totalRooms : 'No Rooms'}}
     
     
+<div *ngIf="selectedRoom">
+    {{selectedRoom | json}}
+</div>
+<div>
+    <button (click)="addRoom()">Add Room</button>
+</div>
+        
 <div *ngIf = "rooms.availableRooms && rooms.availableRooms > 0">
-    <table>
-        <tr>
-            <th>Index</th>
-            <th>Even/Odd</th>
-            <th>Room Number</th>
-            <th>Room Type</th>
-            <th>Room Price</th>
-            <th>Room Aminities</th>
-            <th>Checkin Time</th>
-            <th>Rating</th>
-        </tr>
-        <tr [ngClass]="e ? 'even' : 'odd'" *ngFor="let room of roomList | slice : 0:3; let e=even; let o=odd; let i=index">
-            <td>{{i | percent}}</td>
-            <td>{{e ? 'Even' : 'Odd'}}</td>
-            <td>{{room.roomNumber}}</td>
-            <td>{{room.roomType}}</td>
-            <td>{{room.price | currency: 'EUR'}}</td>
-            <td>{{room.amenities | lowercase}}</td>
-            <td>{{room.checkingTime | date: 'short'}}</td>
-            <td>{{room.rating | number: '1.1-1': 'en-us'}}</td>
-            
-        </tr>
-    </table>
+    <app-room-list [rooms] = "roomList" (selectedRoom)="selectRoom($event)" [title] = "title1"> </app-room-list>
 </div>
 
 
 <button (click)="toggle()">Toggle</button>
+
+
