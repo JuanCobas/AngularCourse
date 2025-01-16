@@ -1,16 +1,19 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, DoCheck, Input, OnChanges, OnInit, QueryList, SimpleChanges, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, DoCheck, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, SkipSelf, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { Room, RoomList } from './rooms';
 import { CommonModule } from '@angular/common';
 import { RoomListComponent } from './room-list/room-list.component';
 import { HeaderComponent } from '../header/header.component';
 import { ContainerComponent } from "../container/container.component";
+import { RoomService } from './services/room.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-rooms',
   imports: [CommonModule, RoomListComponent, HeaderComponent],
   templateUrl: './rooms.component.html',
   styleUrl: './rooms.component.css',
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.Default,
+  //providers: [RoomService]
    
 })
 export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterViewChecked {
@@ -21,6 +24,15 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
 
   
 
+  stream = new Observable(observer => {
+    observer.next('user1'),
+    observer.next('user2'),
+    observer.next('user3'),
+    observer.complete()
+
+  }
+)
+
   
   selectRoom(room : RoomList):void {
     this.selectedRoom = room; 
@@ -30,45 +42,14 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
   
   @ViewChild(HeaderComponent) headerComponent! : HeaderComponent;
   @ViewChildren(HeaderComponent) headerChildrenComponent!: QueryList<HeaderComponent>;
-
+  roomList: RoomList[] = []
  ngOnInit() : void {
-  // console.log(this.headerComponent);
-  
-  this.roomList = [
-    {
-      roomNumber: 1,
-      roomType: 'Deluxe Room',
-      amenities: 'Air Conditiones, Free Wi-Wi',
-      price: 500,
-      photos: 'https',
-      checkingTime: new Date('11-10-21'),
-      checkoutTime: new Date('12-10-21'),
-      rating: 5.554
-    },
-    {
-      roomNumber: 2,
-      roomType: 'Deluxe Room',
-      amenities: 'Air Conditiones, Free Wi-Wi',
-      price: 1000,
-      photos: 'https',
-      checkingTime: new Date('11-10-21'),
-      checkoutTime: new Date('12-10-21'),
-      rating: 4.467
-    },
-    {
-      roomNumber: 3,
-      roomType: 'Private Suit',
-      amenities: 'Air Conditiones, Free Wi-Wi',
-      price: 1500,
-      photos: 'https',
-      checkingTime: new Date('11-10-21'),
-      checkoutTime: new Date('12-10-21'),
-      rating: 8.285
-    }
-  ]
+  this.stream.subscribe({next: (value) => console.log(value), complete: () => console.log('complete'), error: (err) => console.log(err)});
+  this.stream.subscribe((data) => console.log(data));
+  this.roomService.getRooms().subscribe((rooms: RoomList[]) => this.roomList = rooms);
+ }
 
- } 
- constructor(){
+ constructor(@SkipSelf() private roomService: RoomService){
 
  }
   ngAfterViewInit(): void {
@@ -90,17 +71,19 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
   ngAfterViewChecked(): void {
       console.log();
   }
+
+  
  rooms: Room = {
   totalRooms: 20,
   availableRooms: 10,
   bookedRooms: 5,
  }
 
- roomList: RoomList[] = []
+ 
 
   addRoom(){
     const room:RoomList = {
-      roomNumber: 4,
+      roomNumber: '4',
       roomType: "deluxe",
       amenities: "wifi",
       price: 1500,
@@ -122,4 +105,6 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
     
    
   }
+
+
 }

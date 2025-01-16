@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { Room, RoomList } from '../rooms';
 
 
@@ -11,7 +11,7 @@ import { Room, RoomList } from '../rooms';
   changeDetection: ChangeDetectionStrategy.OnPush
   
 })
-export class RoomListComponent implements OnChanges {
+export class RoomListComponent implements OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
@@ -31,9 +31,13 @@ export class RoomListComponent implements OnChanges {
     this.selectedRoom.emit(room);
   }
 
+  ngOnDestroy(): void {
+    console.log('on destroy is called')
+  }
+
   addRoom(){
     const room:RoomList = {
-      roomNumber: 4,
+      roomNumber: '4',
       roomType: "deluxe",
       amenities: "wifi",
       price: 1500,
