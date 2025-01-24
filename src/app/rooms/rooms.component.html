@@ -20,12 +20,23 @@
 <div>
     <button (click)="addRoom()">Add Room</button>
 </div>
-        
-<div *ngIf = "hidden">
-    <app-room-list [rooms] = "roomList" (selectedRoom)="selectRoom($event)" [title] = "title1"> </app-room-list>
+
+<h1>
+    {{getError$ | async}}
+</h1>
+
+<div *ngIf = "rooms$ | async as room">
+    <app-room-list [rooms] = "room" (selectedRoom)="selectRoom($event)" [title] = "title1"> </app-room-list>
 </div>
 
 
+
+<h1 *ngFor="let value of roomsCount$ | async">Amount of rooms: {{value}}</h1>
 <button (click)="toggle()">Toggle</button>
+<button (click)="updateRoom()">Update Room</button>
+<button (click)="deleteRoom()">Delete Room</button>
+<h1>
+    {{totalBytes}} loaded
+</h1>
 
 

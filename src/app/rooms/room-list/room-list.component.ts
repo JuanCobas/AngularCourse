@@ -23,7 +23,7 @@ export class RoomListComponent implements OnChanges, OnDestroy {
   @Input() title: string = '';
 
 
-  @Input() rooms: RoomList[] = [];
+  @Input() rooms: RoomList[] | null= [];
 
   @Output() selectedRoom = new EventEmitter<RoomList>;
 
@@ -42,12 +42,15 @@ export class RoomListComponent implements OnChanges, OnDestroy {
       amenities: "wifi",
       price: 1500,
       photos: 'https',
-      checkingTime: new Date('11-10-21'),
+      checkinTime: new Date('11-10-21'),
       checkoutTime: new Date('12-10-21'),
       rating: 8.285
     };
     //this.roomList.push(room);
-    this.rooms.push(room);
+    if(this.rooms !== null){
+      this.rooms.push(room);
+    }
+    
   }
    
 }

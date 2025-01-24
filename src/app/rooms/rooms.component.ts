@@ -1,11 +1,12 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, DoCheck, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, SkipSelf, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, DoCheck, Input, Host, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, SkipSelf, ViewChild, ViewChildren, ViewEncapsulation, Inject } from '@angular/core';
 import { Room, RoomList } from './rooms';
 import { CommonModule } from '@angular/common';
 import { RoomListComponent } from './room-list/room-list.component';
 import { HeaderComponent } from '../header/header.component';
 import { ContainerComponent } from "../container/container.component";
 import { RoomService } from './services/room.service';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, of, Subject, Subscription } from 'rxjs';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-rooms',
@@ -16,11 +17,14 @@ import { Observable } from 'rxjs';
   //providers: [RoomService]
    
 })
-export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterViewChecked {
+export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, OnDestroy {
 
   @Input() show: any;
   @Input() title = '';
   hidden: boolean = true;
+  subscription! : Subscription;
+  
+  rooms$! : Observable<RoomList[]>;
 
   
 
@@ -32,26 +36,68 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
 
   }
 )
-
   
   selectRoom(room : RoomList):void {
     this.selectedRoom = room; 
   }
 
   selectedRoom!: RoomList; 
+
+  totalBytes: number = 0;
   
   @ViewChild(HeaderComponent) headerComponent! : HeaderComponent;
   @ViewChildren(HeaderComponent) headerChildrenComponent!: QueryList<HeaderComponent>;
   roomList: RoomList[] = []
+  
+
  ngOnInit() : void {
+  this.roomService.getPhotos().subscribe((event) => {
+    switch(event.type){
+      case HttpEventType.Sent:{
+        console.log("Request has been made!")
+        break;
+      }
+      case HttpEventType.ResponseHeader: {
+        console.log("Request Success!");
+        break;
+      }
+      case HttpEventType.DownloadProgress: {
+        this.totalBytes += event.loaded;
+        break;
+      }
+      case HttpEventType.Response: {
+        console.log(event.body);
+      }
+
+      }
+    }
+
+    
+  );
+
   this.stream.subscribe({next: (value) => console.log(value), complete: () => console.log('complete'), error: (err) => console.log(err)});
   this.stream.subscribe((data) => console.log(data));
-  this.roomService.getRooms().subscribe((rooms: RoomList[]) => this.roomList = rooms);
- }
+  //this.roomService.getRooms$.subscribe((rooms: RoomList[]) => this.roomList = rooms);
+  this.rooms$ = this.roomService.getRooms$.pipe(
+    catchError((err) => {//console.log(err);
+      this.error$.next(err.message);
+      return of([]);
+    }
+  )
+  )
 
+  this.roomsCount$ = this.roomService.getRooms$.pipe(map((data: RoomList[]) => data.map(number => number.roomNumber)))
+ }
+ 
  constructor(@SkipSelf() private roomService: RoomService){
 
  }
+
+error$ : Subject<string> = new Subject<string>;
+getError$ = this.error$.asObservable();
+
+roomsCount$! : Observable<string[]>;
+
   ngAfterViewInit(): void {
     this.headerComponent.title = "Rooms View";
     
@@ -60,7 +106,7 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
       second.title = "Segundo";
     }
      
-  
+    
     this.headerChildrenComponent.last.title = "Last Title";
     
     
@@ -88,12 +134,13 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
       amenities: "wifi",
       price: 1500,
       photos: 'https',
-      checkingTime: new Date('11-10-21'),
+      checkinTime: new Date('11-10-21'),
       checkoutTime: new Date('12-10-21'),
       rating: 8.285
     }
     //this.roomList.push(room);
-    this.roomList = [...this.roomList, room]
+    // this.roomList = [...this.roomList, room]
+    this.roomService.addRoom(room).subscribe((data) => {this.roomList = data});
   }
 
   title1: string = 'Room List';
@@ -106,5 +153,27 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
    
   }
 
+  updateRoom(): void{
+    const room:RoomList = {
+      roomNumber: '1',
+      roomType: "deluxe",
+      amenities: "wifi",
+      price: 1500,
+      photos: 'https',
+      checkinTime: new Date('11-10-21'),
+      checkoutTime: new Date('12-10-21'),
+      rating: 8.285
+    }
+    this.roomService.updateRoom(room).subscribe((data) => this.roomList = data);
+  }
 
+  deleteRoom(){
+    this.roomService.deleteRoom('1').subscribe((data) => this.roomList = data);
+  }
+
+  ngOnDestroy(): void {
+      if(this.subscription){
+        this.subscription.unsubscribe();
+      }
+  }
 }

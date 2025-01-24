@@ -8,13 +8,13 @@ import { RoomList } from '../rooms/rooms';
   imports: [],
   templateUrl: './container.component.html',
   styleUrl: './container.component.css',
-  providers: [RoomService]
+  //providers: [RoomService]
 })
 export class ContainerComponent implements OnInit, AfterContentInit {
 
   @ContentChild(EmployeeComponent) employee!: EmployeeComponent;
 
-  constructor(@Host() private roomService: RoomService){
+  constructor(){
 
   }
 
