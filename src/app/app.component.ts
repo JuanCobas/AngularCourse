@@ -5,11 +5,16 @@ import { ContainerComponent } from "./container/container.component";
 import { EmployeeComponent } from './employee/employee.component';
 import { LoggerService } from './logger.service';
 import {localStorageToken} from './localstorage.token'
+import { InitService } from './init.service';
+import { AppConfig } from './AppConfig/appconfig.interface';
+import { APP_CONFIG, APP_SERVICE_CONFIG } from './AppConfig/appconfig.service';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { AppNavComponent } from "./app-nav/app-nav.component";
 
 
 @Component({
   selector: 'app-root',
-  imports: [RoomsComponent, CommonModule, ContainerComponent, EmployeeComponent],
+  imports: [RoomsComponent, CommonModule, ContainerComponent, EmployeeComponent, RouterLink, AppNavComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -20,9 +25,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   constructor(@Optional() private loggerService: LoggerService,
-  @Inject(localStorageToken) private localStorage: Storage
+  @Inject(localStorageToken) private localStorage: Storage,
+  private initService: InitService,
+  @Inject(APP_SERVICE_CONFIG) private appConfig: AppConfig
 ){
-
+  console.log(this.initService.config);
   }
   role: string= "Admin";
 
@@ -30,8 +37,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
       this.loggerService?.log('AppComponent.ngOnInit()')
-      console.log(this.name.nativeElement.innerText = "Hilton Hotel");
+      //console.log(this.name.nativeElement.innerText = "Hilton Hotel");
       this.localStorage.setItem('name', 'Hilton Hotel');
+      
   }
 
   @ViewChild(RoomsComponent) roomComponent!: RoomsComponent;
@@ -40,7 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
 
-    this.roomComponent.title = "Front Cambiado"
+    //this.roomComponent.title = "Front Cambiado"
       
   }
   // ngAfterViewInit(): void {

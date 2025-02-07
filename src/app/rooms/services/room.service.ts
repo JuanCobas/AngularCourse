@@ -8,20 +8,21 @@ import { Observable, shareReplay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
+
     
 })
 export class RoomService {
 
   
   
-  headers = new HttpHeaders({'token': '12345jkl432n432n4'});
+  //headers = new HttpHeaders({'token': '12345jkl432n432n4'});
 
   constructor(@Inject(APP_SERVICE_CONFIG) private config: AppConfig,
     private http: HttpClient) {
     console.log(config.apiEndpoint);
     console.log('Room Service Initialized...');
     
-    this.getRooms$ = this.http.get<RoomList[]>('/api/rooms/', {headers: this.headers}).pipe(
+    this.getRooms$ = this.http.get<RoomList[]>('/api/rooms/').pipe(
       shareReplay(1)
     )
    }
@@ -38,7 +39,8 @@ export class RoomService {
     return this.http.get<RoomList[]>(`/api/rooms/`);
   }
   addRoom(room: RoomList) {
-    return this.http.post<RoomList[]>('/api/rooms/', room, {headers: this.headers})
+    return this.http.post<RoomList[]>('/api/rooms/', room)
+    
   }
   updateRoom(room: RoomList){
     return this.http.put<RoomList[]>(`api/rooms/${room.roomNumber}`, room)

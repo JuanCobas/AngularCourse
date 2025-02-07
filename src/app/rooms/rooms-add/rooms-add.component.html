@@ -1,0 +1,39 @@
+<!-- const room:RoomList = {
+    //roomNumber: '4',
+    roomType: "deluxe",
+    amenities: "wifi",
+    price: 1500,
+    photos: 'https',
+    checkinTime: new Date('11-10-21'),
+    checkoutTime: new Date('12-10-21'),
+    rating: 8.285
+  } -->
+    
+    {{room | json}}
+
+  <form (ngSubmit)="addRoom()">
+    <div class="form-group">
+        <input class="form-control" type="text" name="roomType" [(ngModel)]="room.roomType" placeholder="Room Type">
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="text" name="amenities" [(ngModel)]="room.amenities" placeholder="Amenities">
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="number" name="price" [(ngModel)]="room.price" placeholder="Price">
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="text" name="PhotLink" [(ngModel)]="room.photos" placeholder="Photo Link">
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="datetime" name="checkinTime" [(ngModel)]="room.checkinTime" placeholder="checkinTime">
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="datetime" name="checkoutTime" [(ngModel)]="room.checkoutTime" placeholder="checkoutTime">
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="number" name="rating" [(ngModel)]="room.rating" placeholder="rating">
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Add Room</button>
+    </div>
+  </form>

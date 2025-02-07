@@ -78,7 +78,7 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
   this.stream.subscribe({next: (value) => console.log(value), complete: () => console.log('complete'), error: (err) => console.log(err)});
   this.stream.subscribe((data) => console.log(data));
   //this.roomService.getRooms$.subscribe((rooms: RoomList[]) => this.roomList = rooms);
-  this.rooms$ = this.roomService.getRooms$.pipe(
+  this.rooms$ = this.roomService.getRooms().pipe(
     catchError((err) => {//console.log(err);
       this.error$.next(err.message);
       return of([]);
@@ -86,7 +86,7 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
   )
   )
 
-  this.roomsCount$ = this.roomService.getRooms$.pipe(map((data: RoomList[]) => data.map(number => number.roomNumber)))
+  this.roomsCount$ = this.roomService.getRooms$.pipe(map((data: RoomList[]) => data.map(number => number.roomNumber as string)))
  }
  
  constructor(@SkipSelf() private roomService: RoomService){
@@ -129,7 +129,7 @@ roomsCount$! : Observable<string[]>;
 
   addRoom(){
     const room:RoomList = {
-      roomNumber: '4',
+      //roomNumber: '4',
       roomType: "deluxe",
       amenities: "wifi",
       price: 1500,
@@ -150,7 +150,6 @@ roomsCount$! : Observable<string[]>;
     this.title1 = "Rooms List91"
     this.show;
     
-   
   }
 
   updateRoom(): void{
