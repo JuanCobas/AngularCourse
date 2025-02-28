@@ -9,14 +9,23 @@
     rating: 8.285
   } -->
     
-    {{room | json}}
+    <!-- {{room | json}} -->
+    {{roomsForm.valid}}
+    {{roomsForm.invalid}}
+    {{roomsForm.pristine}}
+    {{roomsForm.dirty}}
+    {{roomsForm.value | json}}
 
-  <form (ngSubmit)="addRoom()">
+
+  <form #roomsForm = "ngForm" (ngSubmit)="addRoom(roomsForm)">
     <div class="form-group">
-        <input class="form-control" type="text" name="roomType" [(ngModel)]="room.roomType" placeholder="Room Type">
+        <input required class="form-control" type="text" name="roomType" [(ngModel)]="room.roomType" placeholder="Room Type">
     </div>
     <div class="form-group">
-        <input class="form-control" type="text" name="amenities" [(ngModel)]="room.amenities" placeholder="Amenities">
+        <input #roomAmenities = "ngModel" required minlength="5" maxlength="20" class="form-control" type="text" name="amenities" [(ngModel)]="room.amenities" placeholder="Amenities">
+    </div>
+    <div class="alert alert-danger" *ngIf="roomAmenities.errors?.['minlength']">
+        Field should have a minimum of 5 characters length!
     </div>
     <div class="form-group">
         <input class="form-control" type="number" name="price" [(ngModel)]="room.price" placeholder="Price">
@@ -34,6 +43,6 @@
         <input class="form-control" type="number" name="rating" [(ngModel)]="room.rating" placeholder="rating">
     </div>
     <div>
-        <button type="submit" class="btn btn-primary">Add Room</button>
+        <button [disabled] = "roomsForm.invalid" type="submit" class="btn btn-primary">Add Room</button>
     </div>
   </form>

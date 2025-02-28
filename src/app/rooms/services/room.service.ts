@@ -16,7 +16,7 @@ export class RoomService {
   
   
   //headers = new HttpHeaders({'token': '12345jkl432n432n4'});
-
+  
   constructor(@Inject(APP_SERVICE_CONFIG) private config: AppConfig,
     private http: HttpClient) {
     console.log(config.apiEndpoint);

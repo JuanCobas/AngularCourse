@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RoomList } from '../rooms';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { RoomService } from '../services/room.service';
 
 @Component({
@@ -26,7 +26,20 @@ export class RoomsAddComponent {
   roomservice : RoomService = inject(RoomService);
 
 
-  addRoom(){
+  addRoom(roomform : NgForm){
     this.roomservice.addRoom(this.room).subscribe();
+    roomform.resetForm(
+      {
+        roomType: '',
+        amenities: '',
+        price: 0,
+        photos: '',
+        checkinTime: new Date(),
+        checkoutTime: new Date(),
+        rating: 0
+    
+      }
+      
+    );
   }
 }

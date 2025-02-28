@@ -1,0 +1,16 @@
+<form #formLogin = "ngForm" (ngSubmit)="submit(formLogin)">
+    <div class="form-group">
+    <input #emailComponent="ngModel" appHover appEmailvalidator color = "yellow" class="form-control" name="username" type="email" placeholder="Provide your Username" [(ngModel)]="username" required>
+    </div>
+    <div>
+        {{emailComponent.errors | json}}
+    </div>
+    <div>
+        <input appHover color = "yellow" class="form-control" name="password"  type="password" placeholder="Enter your password" [(ngModel)]="password" required>
+    </div>
+    <div>
+        <button [disabled]="formLogin.invalid" class="btn btn-primary" type="submit">
+            Login
+        </button>
+    </div>
+</form>
