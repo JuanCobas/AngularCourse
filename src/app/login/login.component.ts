@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
+import { Component, Inject, NgModule, inject } from '@angular/core';
 import {FormsModule, NgForm, NgModel } from '@angular/forms';
 import { HoverDirective } from '../hover.directive';
 import { EmailvalidatorDirective } from '../emailvalidator/emailvalidator.directive';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { LoginServiceService } from './login-service.service';
 
 
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, HoverDirective, CommonModule, EmailvalidatorDirective],
+  imports: [FormsModule, HoverDirective, CommonModule, EmailvalidatorDirective, RouterOutlet],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -22,9 +23,11 @@ export class LoginComponent {
 
   }
 
-  submit(submitedLogin : NgForm):void {
-    if (submitedLogin.value['username'] === 'admin@gmail.com' && submitedLogin.value['password'] === 'admin') {
-      this.route.navigate(["rooms", "add"])
+  private loginService= inject(LoginServiceService);
+
+  submit():void {
+    if (this.loginService.login(this.username, this.password)) {
+      this.route.navigate(["rooms"])
     }
   }
 

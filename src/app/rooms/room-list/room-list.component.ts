@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { Room, RoomList } from '../rooms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { FilterPipe } from '../filter.pipe';
 
 
 @Component({
   selector: 'app-room-list',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, RouterOutlet, FilterPipe],
   templateUrl: './room-list.component.html',
   styleUrl: './room-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -24,7 +25,7 @@ export class RoomListComponent implements OnChanges, OnDestroy {
   @Input() title: string = '';
 
 
-  @Input() rooms: RoomList[] | null= [];
+  @Input() rooms: RoomList[]= [];
 
   @Output() selectedRoom = new EventEmitter<RoomList>;
 

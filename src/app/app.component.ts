@@ -8,13 +8,15 @@ import {localStorageToken} from './localstorage.token'
 import { InitService } from './init.service';
 import { AppConfig } from './AppConfig/appconfig.interface';
 import { APP_CONFIG, APP_SERVICE_CONFIG } from './AppConfig/appconfig.service';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { EventType, NavigationEnd, NavigationStart, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AppNavComponent } from "./app-nav/app-nav.component";
+import { ConfigService } from './services/config.service';
+import { filter } from 'rxjs';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RoomsComponent, CommonModule, ContainerComponent, EmployeeComponent, RouterLink, AppNavComponent],
+  imports: [RoomsComponent, CommonModule, ContainerComponent, EmployeeComponent, RouterLink, AppNavComponent, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -27,7 +29,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(@Optional() private loggerService: LoggerService,
   @Inject(localStorageToken) private localStorage: Storage,
   private initService: InitService,
-  @Inject(APP_SERVICE_CONFIG) private appConfig: AppConfig
+  @Inject(APP_SERVICE_CONFIG) private appConfig: AppConfig,
+  private configService: ConfigService,
+  private router: Router
 ){
   console.log(this.initService.config);
   }
@@ -35,7 +39,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   @ViewChild('name', {static: true}) name!: ElementRef;
 
+
   ngOnInit(): void {
+    this.router.events.pipe(filter((event) => event instanceof NavigationStart)).subscribe(() => console.log('Navigation Started'));
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => console.log('Navigation Ended'));
+    
+
       this.loggerService?.log('AppComponent.ngOnInit()')
       //console.log(this.name.nativeElement.innerText = "Hilton Hotel");
       this.localStorage.setItem('name', 'Hilton Hotel');

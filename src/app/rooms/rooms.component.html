@@ -2,12 +2,12 @@
 
 
 
-<div [ngStyle]="{'color': rooms.availableRooms ? 'blue' : 'red'}" *ngIf="hidden">
+<!-- <div [ngStyle]="{'color': rooms.availableRooms ? 'blue' : 'red'}" *ngIf="hidden">
 
     <p>rooms works!</p>
     <p>Titulo: {{title}}</p>
     
-</div>
+</div> -->
 
         <!-- {{roomList | json}} -->
 
@@ -24,19 +24,25 @@
 <h1>
     {{getError$ | async}}
 </h1>
-
-<div *ngIf = "rooms$ | async as room">
-    <app-room-list [rooms] = "room" (selectedRoom)="selectRoom($event)" [title] = "title1"> </app-room-list>
+{{priceFilter.value| json}}
+<div>
+    <input type="number" class="form-control" placeholder="Price" [formControl]="priceFilter">
 </div>
 
 
 
-<h1 *ngFor="let value of roomsCount$ | async">Room Number: {{value}}</h1>
+<div *ngIf = "rooms$ | async as room">
+    <app-room-list [rooms] = "room | filter: priceFilter.value" (selectedRoom)="selectRoom($event)" [title] = "title1"> </app-room-list>
+</div>
+
+
+<router-outlet></router-outlet>
+<!-- <h1 *ngFor="let value of roomsCount$ | async">Room Number: {{value}}</h1>
 <button (click)="toggle()">Toggle</button>
 <button (click)="updateRoom()">Update Room</button>
 <button (click)="deleteRoom()">Delete Room</button>
 <h1>
     {{totalBytes}} loaded
-</h1>
+</h1> -->
 
 

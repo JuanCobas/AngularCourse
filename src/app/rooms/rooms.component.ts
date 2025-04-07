@@ -7,14 +7,19 @@ import { ContainerComponent } from "../container/container.component";
 import { RoomService } from './services/room.service';
 import { catchError, map, Observable, of, Subject, Subscription } from 'rxjs';
 import { HttpEventType } from '@angular/common/http';
+import { RouterOutlet } from '@angular/router';
+import { ConfigService } from '../services/config.service';
+import { ROUTE_CONFIG_TOKEN } from '../services/routeConfig.service';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FilterPipe } from './filter.pipe';
 
 @Component({
   selector: 'app-rooms',
-  imports: [CommonModule, RoomListComponent, HeaderComponent],
+  imports: [CommonModule, RoomListComponent, HeaderComponent, RouterOutlet, ReactiveFormsModule, FilterPipe],
   templateUrl: './rooms.component.html',
   styleUrl: './rooms.component.css',
   changeDetection: ChangeDetectionStrategy.Default,
-  //providers: [RoomService]
+  providers: []
    
 })
 export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, OnDestroy {
@@ -26,8 +31,8 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
   
   rooms$! : Observable<RoomList[]>;
 
+  priceFilter = new FormControl(0);
   
-
   stream = new Observable(observer => {
     observer.next('user1'),
     observer.next('user2'),
@@ -38,7 +43,8 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
 )
   
   selectRoom(room : RoomList):void {
-    this.selectedRoom = room; 
+    this.selectedRoom = room;
+    //console.log(this.selectedRoom);
   }
 
   selectedRoom!: RoomList; 
@@ -89,7 +95,7 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit, AfterView
   this.roomsCount$ = this.roomService.getRooms$.pipe(map((data: RoomList[]) => data.map(number => number.roomNumber as string)))
  }
  
- constructor(@SkipSelf() private roomService: RoomService){
+ constructor(@SkipSelf() private roomService: RoomService, private configService: ConfigService){
 
  }
 
@@ -99,7 +105,7 @@ getError$ = this.error$.asObservable();
 roomsCount$! : Observable<string[]>;
 
   ngAfterViewInit(): void {
-    this.headerComponent.title = "Rooms View";
+    //this.headerComponent.title = "Rooms View";
     
     const second: HeaderComponent | undefined = this.headerChildrenComponent.get(1);
     if(second){
@@ -107,7 +113,7 @@ roomsCount$! : Observable<string[]>;
     }
      
     
-    this.headerChildrenComponent.last.title = "Last Title";
+    //this.headerChildrenComponent.last.title = "Last Title";
     
     
   }

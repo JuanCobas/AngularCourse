@@ -8,7 +8,7 @@ export class HoverDirective implements OnInit {
   
   @Input() color:string = 'red';
 
-  constructor(private element: ElementRef, @Inject(DOCUMENT) document: Document, private renderer: Renderer2) {
+  constructor(private element: ElementRef, private renderer: Renderer2) {
     console.log(this.element.nativeElement)
    }
 

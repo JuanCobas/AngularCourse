@@ -1,4 +1,4 @@
-<form #formLogin = "ngForm" (ngSubmit)="submit(formLogin)">
+<form #formLogin = "ngForm" (ngSubmit)="submit()">
     <div class="form-group">
     <input #emailComponent="ngModel" appHover appEmailvalidator color = "yellow" class="form-control" name="username" type="email" placeholder="Provide your Username" [(ngModel)]="username" required>
     </div>
@@ -14,3 +14,4 @@
         </button>
     </div>
 </form>
+

@@ -2,6 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppNavComponent } from './app-nav.component';
+import { ActivatedRoute } from '@angular/router';
 
 describe('AppNavComponent', () => {
   let component: AppNavComponent;
@@ -9,7 +10,8 @@ describe('AppNavComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule]
+      imports: [],
+      providers: [{provide: ActivatedRoute, useValue: {}}]
     }).compileComponents();
   }));
 
@@ -21,5 +23,9 @@ describe('AppNavComponent', () => {
 
   it('should compile', () => {
     expect(component).toBeTruthy();
+  });
+  it('should render toolbar', () => {
+    const toolbar = fixture.nativeElement.querySelector('mat-toolbar');
+    expect(toolbar).toBeTruthy();
   });
 });
